@@ -1,6 +1,5 @@
 // TODO: Make calendar.js a module
 
-
 // TODO: move caledar properties into Calendar class
 // labels for the days of the week
 daysName = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -105,8 +104,6 @@ Calendar.prototype.generateCalendarHTML = function() {
         html += '</td>';
     }
     html += '</tr><tr>';
-    
-    console.log("month detail:" + monthDetail.firstDay);
     
     // Build Calendar
     var day = 1;
