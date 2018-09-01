@@ -17,19 +17,6 @@ numberOrdinal = { 0:'th', 1:'st', 2:'nd', 3:'rd', 4:'th', 5:'th', 6:'th', 7:'th'
 // the days of the week for each month, in order
 daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-// the current date
-dateObj = new Date();
-
-// make Monday first day of the week
-function adjustForMondayStart(adjustedDay) {
-    if (adjustedDay == 0) {
-        adjustedDay += 6;
-    } else {
-        adjustedDay -= 1;
-    }
-    return adjustedDay;
-};
-
 // add number ordinal i.e 1st, 2nd, 3rd and 4th
 function addNumberOrdinal(day) {
     var i;
@@ -45,43 +32,56 @@ function addNumberOrdinal(day) {
     return numberOrdinal[i];
 }
 
+// make Monday first day of the week
+function adjustForMondayStart(adjustedDay) {
+    if (adjustedDay == 0) {
+        adjustedDay += 6;
+    } else {
+        adjustedDay -= 1;
+    }
+    return adjustedDay;
+};
+
+// the current date
+dateObj = new Date();
+
 // TODO: make this function private
 
 // create Calendar object
 function Calendar() {
-    this.date = dateObj.getDate() ;
-    this.weekday = dateObj.getDay() ;
-    this.month = dateObj.getMonth() ;
-    this.year = dateObj.getFullYear() ;
-    this.html = '';
+    today = dateObj.getDate() ;
+    weekday = dateObj.getDay() ;
+    month = dateObj.getMonth() ;
+    year = dateObj.getFullYear() ;
+    html = '';
 }
 
 // generate Calendar HTML
 Calendar.prototype.generateCalendarHTML = function() {
 
     // get first day of month
-    var firstDay = new Date(this.year, this.month, 1);
+    var firstDay = new Date(year, month, 1);
     var startingDayOfTheWeek = firstDay.getDay();
 
     // number of days in month
-    var monthLength = daysInMonth[this.month];
+    var monthLength = daysInMonth[month];
 
     // compensate for leap year
-    if (this.month == 1) { // February only!
-        if ((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0) {
+    if (month == 1) { // February only!
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
             monthLength = 29;
         }
     }
     // make Monday the first day of the week
-    cal_day_of_the_week = daysName[adjustForMondayStart(this.weekday)];
+    cal_day_of_the_week = daysName[adjustForMondayStart(weekday)];
     startingDayOfTheWeek = adjustForMondayStart(startingDayOfTheWeek);
 
     // build the calendar header
-    var monthName = monthsName[this.month]
+    var monthName = monthsName[month]
     var html = '';
     html += '<table class="calendar-table">';
     html += '<tr><th colspan="7">';
-    html += cal_day_of_the_week + '&nbsp;' + this.date+ '<sup>' + addNumberOrdinal(this.date) + '</sup>' + '&nbsp;'+ monthName + "&nbsp;" + this.year;
+    html += cal_day_of_the_week + '&nbsp;' + today+ '<sup>' + addNumberOrdinal(today) + '</sup>' + '&nbsp;'+ monthName + "&nbsp;" + year;
     html += '</th></tr>';
     html += '<tr class="calendar-header">';
     for (var i = 0; i <= 6; i++) {
@@ -98,7 +98,7 @@ Calendar.prototype.generateCalendarHTML = function() {
         // this loop is for weekdays (cells)
         for (var dayOfWeek = 0; dayOfWeek <= 6; dayOfWeek++) {
             // highlight today's date            
-            if (day == this.date && (dayOfWeek >= startingDayOfTheWeek)) {
+            if (day == today && (dayOfWeek >= startingDayOfTheWeek)) {
                 html += '<td class="calendar-day today">';
             } else {
                 html += '<td class="calendar-day">';

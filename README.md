@@ -4,4 +4,5 @@ feature--calendar_module: convert calendar.js to a module.
 
 I have made this change on the iPad using Working Copy.
 
-This change was made on the iPad using Textastic.
+## How to use Working Copy with Textastic
+A repository in Working Copy can be used in Textastic by adding the Working Copy folder found in iCloud.
