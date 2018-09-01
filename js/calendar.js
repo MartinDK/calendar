@@ -1,5 +1,7 @@
 // TODO: Make calendar.js a module
 
+// make changes in Textastic
+
 // labels for the days of the week
 daysName = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
