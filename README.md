@@ -1,0 +1,1 @@
+This module adds a calendar of the current month. 
