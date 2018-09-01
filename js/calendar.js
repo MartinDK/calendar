@@ -1,3 +1,5 @@
+// TODO: Make calendar.js a module
+
 // labels for the days of the week
 daysName = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -40,6 +42,8 @@ function addNumberOrdinal(day) {
     }
     return numberOrdinal[i];
 }
+
+// TODO: make this function private
 
 // create Calendar object
 function Calendar() {
