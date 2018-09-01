@@ -42,23 +42,21 @@ function adjustForMondayStart(adjustedDay) {
     return adjustedDay;
 };
 
-// the current date
-dateObj = new Date();
-
-// TODO: make this function private
-
 // create Calendar object
 function Calendar() {
-    today = dateObj.getDate() ;
-    weekday = dateObj.getDay() ;
-    month = dateObj.getMonth() ;
-    year = dateObj.getFullYear() ;
-    html = '';
+    // the current date
+    const todayObj = new Date();
+    
+    // TODO: take variables out of global scope.
+    today = todayObj.getDate() ;
+    weekday = todayObj.getDay() ;
+    month = todayObj.getMonth() ;
+    year = todayObj.getFullYear() ;
+    var html = '';
 }
 
 // generate Calendar HTML
 Calendar.prototype.generateCalendarHTML = function() {
-
     // get first day of month
     var firstDay = new Date(year, month, 1);
     var startingDayOfTheWeek = firstDay.getDay();
@@ -81,7 +79,7 @@ Calendar.prototype.generateCalendarHTML = function() {
     var html = '';
     html += '<table class="calendar-table">';
     html += '<tr><th colspan="7">';
-    html += cal_day_of_the_week + '&nbsp;' + today+ '<sup>' + addNumberOrdinal(today) + '</sup>' + '&nbsp;'+ monthName + "&nbsp;" + year;
+    html += cal_day_of_the_week + '&nbsp;' + today + '<sup>' + addNumberOrdinal(today) + '</sup>' + '&nbsp;' + monthName + "&nbsp;" + year;
     html += '</th></tr>';
     html += '<tr class="calendar-header">';
     for (var i = 0; i <= 6; i++) {
