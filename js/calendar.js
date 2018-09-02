@@ -1,5 +1,3 @@
-// TODO: Make calendar.js a module
-
 
 function Calendar() {
     // labels for the days of the week
@@ -15,7 +13,7 @@ function Calendar() {
 this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 }
 
-// add number ordinal i.e 1st, 2nd, 3rd and 4th
+// add ordinal to numbers i.e 1st, 2nd, 3rd and 4th
 Calendar.prototype.addNumberOrdinal = function (day) {
 
     // number ordinal labels
@@ -34,8 +32,8 @@ Calendar.prototype.addNumberOrdinal = function (day) {
     return numberOrdinal[i];
 }
 
+// the current date
 Calendar.prototype.getToday = function () {
-    // the current date
     var todayObj = new Date();
     
     var today = todayObj.getDate();
@@ -44,7 +42,6 @@ Calendar.prototype.getToday = function () {
     var year = todayObj.getFullYear();
     console.log(`daysOfWeek-${this.daysOfWeek}`);
     console.log(this.daysOfWeek);
-    var todaysName = this.daysOfWeek[this.startMonday(today)];
     
     return { today:today, weekday:weekday, month:month, year:year }
 }
