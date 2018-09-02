@@ -38,8 +38,11 @@ Calendar.prototype.getToday = function () {
     var weekday = todayObj.getDay();
     var month = todayObj.getMonth();
     var year = todayObj.getFullYear();
+
+    var todaysName = this.daysOfWeek[this.startMonday(weekday)];
+    var readableDate = todaysName + '&nbsp;' + today + '<sup>' + this.addNumberOrdinal(today) + '</sup>' + '&nbsp;' + this.monthsName[month] + "&nbsp;" + year;
     
-    return { today:today, weekday:weekday, month:month, year:year }
+    return { today:today, weekday:weekday, month:month, year:year, readableDate:readableDate };
 }
 
 // make Monday first day of the week
@@ -76,15 +79,15 @@ Calendar.prototype.generateCalendarHTML = function() {
     var monthDetails = this.monthProps(todaysDate.year, todaysDate.month)
     
     // make Monday the first day of the week
-    todaysName = this.daysOfWeek[this.startMonday(todaysDate.weekday)];
     firstDay = this.startMonday(monthDetails.firstDay);
 
     // calendar header
-    var monthName = this.monthsName[todaysDate.month]
+    var readableDate = this.getToday().readableDate;
+
     var html = '';
     html += '<table class="calendar-table">';
     html += '<tr><th colspan="7">';
-    html += todaysName + '&nbsp;' + todaysDate.today + '<sup>' + this.addNumberOrdinal(todaysDate.today) + '</sup>' + '&nbsp;' + monthName + "&nbsp;" + todaysDate.year;
+    html += readableDate;
     html += '</th></tr>';
     html += '<tr class="calendar-header">';
     for (var i = 0; i <= 6; i++) {
