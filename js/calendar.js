@@ -40,8 +40,6 @@ Calendar.prototype.getToday = function () {
     var weekday = todayObj.getDay();
     var month = todayObj.getMonth();
     var year = todayObj.getFullYear();
-    console.log(`daysOfWeek-${this.daysOfWeek}`);
-    console.log(this.daysOfWeek);
     
     return { today:today, weekday:weekday, month:month, year:year }
 }
