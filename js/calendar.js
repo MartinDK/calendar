@@ -1,23 +1,10 @@
 // TODO: Make calendar.js a module
 
-// TODO: move caledar properties into Calendar class
-// labels for the days of the week
-daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-// human-readable month name labels, in order
-monthsName = ['January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August', 'September',
-    'October', 'November', 'December'
-];
-
-// number ordinal labels
-numberOrdinal = { 0:'th', 1:'st', 2:'nd', 3:'rd', 4:'th', 5:'th', 6:'th', 7:'th', 8:'th', 9:'th'}
-
-// the days of the week for each month, in order
-daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
 // add number ordinal i.e 1st, 2nd, 3rd and 4th
 function addNumberOrdinal(day) {
+
+    // number ordinal labels
+    numberOrdinal = { 0: 'th', 1: 'st', 2: 'nd', 3: 'rd', 4: 'th', 5: 'th', 6: 'th', 7: 'th', 8: 'th', 9: 'th'};
     var i;
     if ( day >= 30 ) {
         i = day - 30;
@@ -41,9 +28,18 @@ function startMonday(day) {
     return day;
 };
 
-// create Calendar object
 function Calendar() {
-  // EMPTY
+    // labels for the days of the week
+    this.daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    // human-readable month name labels, in order
+    this.monthsName = ['January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August', 'September',
+        'October', 'November', 'December'
+    ];
+
+    // the days of the week for each month, in order
+    this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 }
 
 Calendar.prototype.getToday = function () {
@@ -54,7 +50,9 @@ Calendar.prototype.getToday = function () {
     var weekday = todayObj.getDay();
     var month = todayObj.getMonth();
     var year = todayObj.getFullYear();
-    var todaysName = daysOfWeek[startMonday(today)];
+    console.log(`daysOfWeek-${this.daysOfWeek}`);
+    console.log(this.daysOfWeek);
+    var todaysName = this.daysOfWeek[startMonday(today)];
     
     return { today:today, weekday:weekday, month:month, year:year }
 }
@@ -64,7 +62,7 @@ Calendar.prototype.monthProps = function (year, month) {
      
     var firstDay = new Date(year, month, 1); // first day of month
     var startOfWeek = firstDay.getDay();
-    var monthLength = daysInMonth[month]; // number of days this month
+    var monthLength = this.daysInMonth[month]; // number of days this month
     var leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     
     // February - leap year
@@ -83,11 +81,11 @@ Calendar.prototype.generateCalendarHTML = function() {
     var monthDetails = this.monthProps(todaysDate.year, todaysDate.month)
     
     // make Monday the first day of the week
-    todaysName = daysOfWeek[startMonday(todaysDate.weekday)];
+    todaysName = this.daysOfWeek[startMonday(todaysDate.weekday)];
     firstDay = startMonday(monthDetails.firstDay);
 
-    // build the calendar header
-    var monthName = monthsName[todaysDate.month]
+    // calendar header
+    var monthName = this.monthsName[todaysDate.month]
     var html = '';
     html += '<table class="calendar-table">';
     html += '<tr><th colspan="7">';
@@ -96,12 +94,12 @@ Calendar.prototype.generateCalendarHTML = function() {
     html += '<tr class="calendar-header">';
     for (var i = 0; i <= 6; i++) {
         html += '<td class="calendar-header-day">';
-        html += daysOfWeek[i];
+        html += this.daysOfWeek[i];
         html += '</td>';
     }
     html += '</tr><tr>';
     
-    // Build Calendar
+    // calendar body
     var day = 1;
     // loop for weeks (rows)
     for (var i = 0; i < 9; i++) {
@@ -128,9 +126,6 @@ Calendar.prototype.generateCalendarHTML = function() {
         }
     }
     html += '</tr></table>';
-    this.html = html;
-}
-// complete Calendar HTML
-Calendar.prototype.calendarHTML = function() {
-    return this.html;
+
+    return this.html = html;
 }
