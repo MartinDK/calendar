@@ -5,11 +5,11 @@ function Calendar() {
     
     // months array in order
     this.monthsName = ['January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August', 'September',
-    'October', 'November', 'December'];
+        'May', 'June', 'July', 'August', 'September',
+        'October', 'November', 'December'];
 
-    // the days of the week for each month, in order
-    this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+// the days of the week for each month, in order
+this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 }
 
 // add ordinal to numbers i.e 1st, 2nd, 3rd and 4th
@@ -113,9 +113,8 @@ Calendar.prototype.generateCalendarHTML = function() {
             }
             html += '</td>';
         }
-        // stop making rows if we've run out of days
+        // stop at end of month
         if (day > monthDetails.monthLength) {
-            console.log("finished");
             break;
         } else {
             html += '</tr><tr>';
