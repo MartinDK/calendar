@@ -35,7 +35,6 @@ Calendar.prototype.addNumberOrdinal = function (day) {
 // the current date
 Calendar.prototype.getToday = function () {
     var todayObj = new Date();
-    
     var today = todayObj.getDate();
     var weekday = todayObj.getDay();
     var month = todayObj.getMonth();
@@ -103,7 +102,7 @@ Calendar.prototype.generateCalendarHTML = function() {
         // loop for weekdays (cells)
         for (var dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
             // highlight today's date            
-            if (day == todaysDate.today && (dayOfWeek >= monthDetails.firstDay)) {
+            if (day == todaysDate.today) {
                 html += '<td class="calendar-day today">';
             } else {
                 html += '<td class="calendar-day">';
@@ -117,6 +116,7 @@ Calendar.prototype.generateCalendarHTML = function() {
         }
         // stop making rows if we've run out of days
         if (day > monthDetails.monthLength) {
+            console.log("finished");
             break;
         } else {
             html += '</tr><tr>';
