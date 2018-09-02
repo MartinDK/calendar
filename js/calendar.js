@@ -2,7 +2,7 @@
 
 // TODO: move caledar properties into Calendar class
 // labels for the days of the week
-daysName = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 // human-readable month name labels, in order
 monthsName = ['January', 'February', 'March', 'April',
@@ -32,7 +32,7 @@ function addNumberOrdinal(day) {
 }
 
 // make Monday first day of the week
-function adjustForMondayStart(day) {
+function startMonday(day) {
     if (day == 0) {
         day += 6;
     } else {
@@ -54,41 +54,37 @@ Calendar.prototype.getToday = function () {
     var weekday = todayObj.getDay();
     var month = todayObj.getMonth();
     var year = todayObj.getFullYear();
+    var todaysName = daysOfWeek[startMonday(today)];
     
     return { today:today, weekday:weekday, month:month, year:year }
 }
 
 // Month properties
 Calendar.prototype.monthProps = function (year, month) {
+     
+    var firstDay = new Date(year, month, 1); // first day of month
+    var startOfWeek = firstDay.getDay();
+    var monthLength = daysInMonth[month]; // number of days this month
+    var leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     
-    // get first day of month
-    var firstDay = new Date(year, month, 1);
-    startOfWeek = firstDay.getDay();
-    
-    // number of days in month
-    monthLength = daysInMonth[month];
+    // February - leap year
+    if (month == 1 && leapYear) {
+            monthLength = 29;
+      };
     
     return { firstDay:startOfWeek, monthLength:monthLength};
 }
-
-// TODO: break generateValendarHTML into smaller functions
 
 // generate Calendar HTML
 Calendar.prototype.generateCalendarHTML = function() {
 
     // todays date, and info about todays month
     var todaysDate = this.getToday(); 
-    var monthDetail = this.monthProps(todaysDate.year, todaysDate.month)
+    var monthDetails = this.monthProps(todaysDate.year, todaysDate.month)
     
-    // compensate for leap year
-    if (todaysDate.month == 1) { // February only!
-        if ((todaysDate.year % 4 == 0 && todaysDate.year % 100 != 0) || todaysDate.year % 400 == 0) {
-            monthLength = 29;
-        }
-    }
     // make Monday the first day of the week
-    todaysName = daysName[adjustForMondayStart(todaysDate.weekday)];
-    firstDay = adjustForMondayStart(monthDetail.firstDay);
+    todaysName = daysOfWeek[startMonday(todaysDate.weekday)];
+    firstDay = startMonday(monthDetails.firstDay);
 
     // build the calendar header
     var monthName = monthsName[todaysDate.month]
@@ -100,7 +96,7 @@ Calendar.prototype.generateCalendarHTML = function() {
     html += '<tr class="calendar-header">';
     for (var i = 0; i <= 6; i++) {
         html += '<td class="calendar-header-day">';
-        html += daysName[i];
+        html += daysOfWeek[i];
         html += '</td>';
     }
     html += '</tr><tr>';
@@ -112,20 +108,20 @@ Calendar.prototype.generateCalendarHTML = function() {
         // loop for weekdays (cells)
         for (var dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
             // highlight today's date            
-            if (day == todaysDate.today && (dayOfWeek >= monthDetail.firstDay)) {
+            if (day == todaysDate.today && (dayOfWeek >= monthDetails.firstDay)) {
                 html += '<td class="calendar-day today">';
             } else {
                 html += '<td class="calendar-day">';
             }
             // start adding calendar days from startingDayOfTheWeek
-            if (day <=  monthDetail.monthLength && (i > 0 || dayOfWeek >= monthDetail.firstDay)) {
+            if (day <=  monthDetails.monthLength && (i > 0 || dayOfWeek >= monthDetails.firstDay)) {
                 html += day;
                 day++;
             }
             html += '</td>';
         }
         // stop making rows if we've run out of days
-        if (day > monthDetail.monthLength) {
+        if (day > monthDetails.monthLength) {
             break;
         } else {
             html += '</tr><tr>';
