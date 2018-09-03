@@ -8,18 +8,15 @@
 </head>
 
 <body>
-    <script type="text/javascript" src="js/calendar.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/events.js"></script>
     <script type="text/javascript">
+
         var cal = new Calendar();
         document.write(cal.generateCalendarHTML());
 
         var x = document.querySelectorAll("td");
-
-        for (let i = 0; i < x.length; i++) {
-            x[i].addEventListener("click", function () {
-                this.style.backgroundColor = "red";
-            });
-        };
+        addEvents(x);
     </script>
 
 </body>
