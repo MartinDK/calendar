@@ -8,8 +8,8 @@ function Calendar() {
         'May', 'June', 'July', 'August', 'September',
         'October', 'November', 'December'];
 
-// the days of the week for each month, in order
-this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    // the days of the week for each month, in order
+    this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 }
 
 // add ordinal to numbers i.e 1st, 2nd, 3rd and 4th
@@ -125,5 +125,5 @@ Calendar.prototype.generateCalendarHTML = function() {
     }
     html += '</tr></table>';
 
-    return this.html = html;
+    return html;
 }
