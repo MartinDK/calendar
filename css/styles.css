@@ -32,6 +32,6 @@ h1 {
     font-weight: 600;
     border-radius: 10%;
 }
-.calendar-day:nth-child(7n){
-    color: red;
+tr>td:nth-child(1n +6){
+    color: #eb0808;
 }
