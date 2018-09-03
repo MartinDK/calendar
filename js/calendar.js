@@ -105,13 +105,13 @@ Calendar.prototype.generateCalendarHTML = function() {
         for (var dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
             // highlight today's date            
             if (day == todaysDate.today) {
-                html += '<td class="calendar-day today">';
+                html += '<td class="calendar-day today"';
             } else {
-                html += '<td class="calendar-day">';
+                html += '<td class="calendar-day"';
             }
             // start adding calendar days from startingDayOfTheWeek
             if (day <=  monthDetails.monthLength && (i > 0 || dayOfWeek >= monthDetails.firstDay)) {
-                html += day;
+                html += ` id="day">${day}`;
                 day++;
             }
             html += '</td>';
