@@ -35,6 +35,24 @@ h1 {
     font-weight: 600;
     border-radius: 10%;
 }
+.calendar-day.today:hover {
+    background-color: #ccb103;
+}
+.calendar-day.today.selected{
+    background-color: #c01616;
+}
 tr>td:nth-child(1n +6){
     color: #eb0808;
+}
+tr>td:nth-child(1n +6).selected{
+    background-color: #c51515;
+    ;
+    color: #ecb6b6;
+}
+.selected {
+    background-color: #ad1313;
+    color: #fdebeb;
+}
+.selected:hover {
+    background-color: #c71212;
 }
