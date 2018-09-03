@@ -12,6 +12,14 @@
     <script type="text/javascript">
         var cal = new Calendar();
         document.write(cal.generateCalendarHTML());
+
+        var x = document.querySelectorAll("td");
+
+        for (let i = 0; i < x.length; i++) {
+            x[i].addEventListener("click", function () {
+                this.style.backgroundColor = "red";
+            });
+        };
     </script>
 
 </body>
