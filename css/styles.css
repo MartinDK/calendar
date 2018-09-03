@@ -27,6 +27,9 @@ h1 {
     background-color: #e4f2ff;
 
 }
+.calendar-day:hover {
+    background-color: #d1e8fd;
+}
 .calendar-day.today {
     background-color: #ffdd00;
     font-weight: 600;
