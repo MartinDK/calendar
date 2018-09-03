@@ -1,16 +1,33 @@
 body {
     color: #444;
     font-family: sans-serif;
-    font-weight: 100
+    font-weight: 100;
 }
 table {
     background-color: #f9fcff;
-    border-radius: 3px
+    border-radius: 3px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 th {
     background-color: #ddeeff;
     padding: 5px;
     font-weight: 600;
+}
+td {
+    text-align: center;
+    width: 30px;
+}
+tr>td:nth-child(1n +6) {
+    color: #eb0808;
+}
+
+tr>td:nth-child(1n +6).selected {
+    background-color: #c51515;
+    color: #ecb6b6;
 }
 h1 {
     font-size: 1.5em;
@@ -21,7 +38,6 @@ h1 {
     padding: 5px;
 }
 .calendar-day {
-    text-align: center;
     font-family: sans-serif;
     padding: 5px;
     background-color: #e4f2ff;
@@ -40,14 +56,6 @@ h1 {
 }
 .calendar-day.today.selected{
     background-color: #c01616;
-}
-tr>td:nth-child(1n +6){
-    color: #eb0808;
-}
-tr>td:nth-child(1n +6).selected{
-    background-color: #c51515;
-    ;
-    color: #ecb6b6;
 }
 .selected {
     background-color: #ad1313;
