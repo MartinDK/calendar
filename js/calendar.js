@@ -11,8 +11,7 @@ function Calendar() {
     // the days of the week for each month, in order
     this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 }
-
-// add ordinal to numbers i.e 1st, 2nd, 3rd and 4th
+// add ordinal i.e 1st, 2nd, 3rd and 4th
 Calendar.prototype.dateOrdinal = function (date) {
 
     // number ordinal labels
@@ -30,7 +29,6 @@ Calendar.prototype.dateOrdinal = function (date) {
     }
     return numberOrdinal[i];
 }
-
 // the current date
 Calendar.prototype.getToday = function () {
     let todayObj = new Date();
@@ -41,13 +39,13 @@ Calendar.prototype.getToday = function () {
     
     return { today:today, weekday:weekday, month:month, year:year };
 }
+// Tue 4th September 2018
 Calendar.prototype.readableDate = function (date) {
     let todaysName = this.daysOfWeek[this.startMonday(date.weekday)];
     let readableDate = todaysName + '&nbsp;' + date.today + '<sup>' + this.dateOrdinal(date.today) + '</sup>' + '&nbsp;' + this.monthsName[date.month] + "&nbsp;" + date.year;
     return readableDate;
 };
-
-// make Monday first day of the week
+// make Monday start of the week
 Calendar.prototype.startMonday = function (day) {
     if (day == 0) {
         day += 6;
@@ -56,7 +54,6 @@ Calendar.prototype.startMonday = function (day) {
     }
     return day;
 };
-
 // Month properties
 Calendar.prototype.monthProps = function (dateObj) {
     
@@ -76,7 +73,6 @@ Calendar.prototype.monthProps = function (dateObj) {
     
     return { startOfMonth:startOfWeek, lengthOfMonth:lengthOfMonth};
 }
-
 Calendar.prototype.calendarTitle = function (dateStr) {
     let html = "";
     html += '<table class="calendar-table">';
@@ -93,39 +89,55 @@ Calendar.prototype.calendarTitle = function (dateStr) {
 
     return html;
 }
-Calendar.prototype.calendarBody = function (monthDetails, todaysDate) {
+Calendar.prototype.calendarRow = function (today, monthDetails, i) {
     let html = "";
-    // calendar body
-    let day = 1;
-    // loop for weeks (rows)
-    for (let i = 0; i < 9; i++) {
-        // loop for weekdays (cells)
-        for (let dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
-            // highlight today's date            
-            if (day == todaysDate.today) {
-                html += '<td class="calendar-day today"';
-            } else {
-                html += '<td class="calendar-day"';
-            }
-            // start adding calendar days from startingDayOfTheWeek
-            if (day <= monthDetails.lengthOfMonth && (i > 0 || dayOfWeek >= monthDetails.startOfMonth)) {
-                html += ` id="day">${day}`;
-                day++;
-            }
-            html += '</td>';
-        }
-        // stop at end of month
-        if (day > monthDetails.lengthOfMonth) {
-            break;
+    let lengthOfMonth = monthDetails.lengthOfMonth;
+    let startOfMonth = monthDetails.startOfMonth;
+    this.dayCounter= dayCounter + 1;
+
+    // loop for weekdays (cells)
+    for (let dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
+
+        html += '<td class="calendar-day';
+
+        // Add today class          
+        if (dayCounter == today) { html += ' today'; }
+
+        // start adding calendar days from startingDayOfTheWeek
+        if (i > 0 || dayOfWeek >= startOfMonth) {
+            html += `" id = "day">${dayCounter}`;
+            dayCounter++;
         } else {
-            html += '</tr><tr>';
+            html += `">`;
         }
+        html += '</td>';
+    }
+    // stop at end of month
+    if (dayCounter > lengthOfMonth) {
+        return html;
+    } else {
+        html += '</tr><tr>';
+    }
+
+    return html
+}
+Calendar.prototype.calendarBody = function (monthDetails, todaysDate) {
+
+    let html = "";
+    let today = todaysDate.today;
+    this.dayCounter = 0
+
+    // loop for weeks (rows)
+    for (let i = 0; i < 6; i++) {
+
+        html += this.calendarRow(today, monthDetails, i);
+
     }
     html += '</tr></table>';
     return html;
 }
-// generate Calendar HTML
-Calendar.prototype.generateCalendarHTML = function() {
+// Build calendar HTML
+Calendar.prototype.calendarHTML = function() {
 
     let todaysDate = this.getToday(); 
     let monthDetails = this.monthProps(todaysDate);
