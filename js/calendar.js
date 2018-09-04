@@ -109,7 +109,7 @@ Calendar.prototype.calendarRow = function (today, monthDetails, week) {
     }
     return html
 }
-// all days of the mone
+// all days of the month
 Calendar.prototype.calendarBody = function (monthDetails, todaysDate) {
 
     let html = "";
