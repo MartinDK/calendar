@@ -13,37 +13,39 @@ function Calendar() {
 }
 
 // add ordinal to numbers i.e 1st, 2nd, 3rd and 4th
-Calendar.prototype.addNumberOrdinal = function (day) {
+Calendar.prototype.dateOrdinal = function (date) {
 
     // number ordinal labels
     numberOrdinal = { 0: 'th', 1: 'st', 2: 'nd', 3: 'rd', 4: 'th', 5: 'th', 6: 'th', 7: 'th', 8: 'th', 9: 'th'};
     
-    var i;
-    if ( day >= 30 ) {
-        i = day - 30;
-    } else if (day >= 20) {
-        i = day - 20;
-    } else if (day >= 10) {
-        i = day - 10;
+    let i;
+    if ( date >= 30 ) {
+        i = date - 30;
+    } else if (date >= 20) {
+        i = date - 20;
+    } else if (date >= 10) {
+        i = date - 10;
     } else {
-        i = day;
+        i = date;
     }
     return numberOrdinal[i];
 }
 
 // the current date
 Calendar.prototype.getToday = function () {
-    var todayObj = new Date();
-    var today = todayObj.getDate();
-    var weekday = todayObj.getDay();
-    var month = todayObj.getMonth();
-    var year = todayObj.getFullYear();
-
-    var todaysName = this.daysOfWeek[this.startMonday(weekday)];
-    var readableDate = todaysName + '&nbsp;' + today + '<sup>' + this.addNumberOrdinal(today) + '</sup>' + '&nbsp;' + this.monthsName[month] + "&nbsp;" + year;
+    let todayObj = new Date();
+    let today = todayObj.getDate();
+    let weekday = todayObj.getDay();
+    let month = todayObj.getMonth();
+    let year = todayObj.getFullYear();
     
-    return { today:today, weekday:weekday, month:month, year:year, readableDate:readableDate };
+    return { today:today, weekday:weekday, month:month, year:year };
 }
+Calendar.prototype.readableDate = function (date) {
+    let todaysName = this.daysOfWeek[this.startMonday(date.weekday)];
+    let readableDate = todaysName + '&nbsp;' + date.today + '<sup>' + this.dateOrdinal(date.today) + '</sup>' + '&nbsp;' + this.monthsName[date.month] + "&nbsp;" + date.year;
+    return readableDate;
+};
 
 // make Monday first day of the week
 Calendar.prototype.startMonday = function (day) {
@@ -56,53 +58,49 @@ Calendar.prototype.startMonday = function (day) {
 };
 
 // Month properties
-Calendar.prototype.monthProps = function (year, month) {
+Calendar.prototype.monthProps = function (dateObj) {
+    
+    let year = dateObj.year;
+    let month = dateObj.month;
+
      
-    var firstDay = new Date(year, month, 1); // first day of month
-    var startOfWeek = firstDay.getDay();
-    var monthLength = this.daysInMonth[month]; // number of days this month
-    var leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    let startOfMonth = new Date(year, month, 1); // first day of month
+    let startOfWeek = startOfMonth.getDay();
+    let lengthOfMonth = this.daysInMonth[month]; // number of days this month
+    let leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     
     // February - leap year
     if (month == 1 && leapYear) {
-            monthLength = 29;
+            lengthOfMonth = 29;
       };
     
-    return { firstDay:startOfWeek, monthLength:monthLength};
+    return { startOfMonth:startOfWeek, lengthOfMonth:lengthOfMonth};
 }
 
-// generate Calendar HTML
-Calendar.prototype.generateCalendarHTML = function() {
-
-    // todays date, and info about todays month
-    var todaysDate = this.getToday(); 
-    var monthDetails = this.monthProps(todaysDate.year, todaysDate.month)
-    
-    // make Monday the first day of the week
-    firstDay = this.startMonday(monthDetails.firstDay);
-
-    // calendar header
-    var readableDate = this.getToday().readableDate;
-
-    var html = '';
+Calendar.prototype.calendarTitle = function (dateStr) {
+    let html = "";
     html += '<table class="calendar-table">';
     html += '<tr><th colspan="7">';
-    html += readableDate;
+    html += dateStr;
     html += '</th></tr>';
     html += '<tr class="calendar-header">';
-    for (var i = 0; i <= 6; i++) {
+    for (let i = 0; i <= 6; i++) {
         html += '<td class="calendar-header-day">';
         html += this.daysOfWeek[i];
         html += '</td>';
     }
     html += '</tr><tr>';
-    
+
+    return html;
+}
+Calendar.prototype.calendarBody = function (monthDetails, todaysDate) {
+    let html = "";
     // calendar body
-    var day = 1;
+    let day = 1;
     // loop for weeks (rows)
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
         // loop for weekdays (cells)
-        for (var dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
+        for (let dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
             // highlight today's date            
             if (day == todaysDate.today) {
                 html += '<td class="calendar-day today"';
@@ -110,20 +108,34 @@ Calendar.prototype.generateCalendarHTML = function() {
                 html += '<td class="calendar-day"';
             }
             // start adding calendar days from startingDayOfTheWeek
-            if (day <=  monthDetails.monthLength && (i > 0 || dayOfWeek >= monthDetails.firstDay)) {
+            if (day <= monthDetails.lengthOfMonth && (i > 0 || dayOfWeek >= monthDetails.startOfMonth)) {
                 html += ` id="day">${day}`;
                 day++;
             }
             html += '</td>';
         }
         // stop at end of month
-        if (day > monthDetails.monthLength) {
+        if (day > monthDetails.lengthOfMonth) {
             break;
         } else {
             html += '</tr><tr>';
         }
     }
     html += '</tr></table>';
+    return html;
+}
+// generate Calendar HTML
+Calendar.prototype.generateCalendarHTML = function() {
 
+    let todaysDate = this.getToday(); 
+    let monthDetails = this.monthProps(todaysDate);
+    let readableDate = this.readableDate(todaysDate);
+    let html = '';
+    
+    startOfMonth = this.startMonday(monthDetails.startOfMonth);
+
+    html += this.calendarTitle(readableDate);
+    html += this.calendarBody(monthDetails, todaysDate);
+    
     return html;
 }
