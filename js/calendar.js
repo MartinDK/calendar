@@ -10,6 +10,8 @@ function Calendar() {
 
     // the days of the week for each month, in order
     this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    this.dayCounter = 1;
 }
 // add ordinal i.e 1st, 2nd, 3rd and 4th
 Calendar.prototype.dateOrdinal = function (date) {
@@ -54,26 +56,23 @@ Calendar.prototype.startMonday = function (day) {
     }
     return day;
 };
-// Month properties
+// month properties
 Calendar.prototype.monthProps = function (dateObj) {
     
     let year = dateObj.year;
     let month = dateObj.month;
 
-     
-    let startOfMonth = new Date(year, month, 1); // first day of month
-    let startOfWeek = startOfMonth.getDay();
+    let firstOfMonth = new Date(year, month, 1); // first day of month
+    let startOfWeek = firstOfMonth.getDay();
     let lengthOfMonth = this.daysInMonth[month]; // number of days this month
+    
     let leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    if (month == 1 && leapYear) { lengthOfMonth = 29; }; // February - leap year
     
-    // February - leap year
-    if (month == 1 && leapYear) {
-            lengthOfMonth = 29;
-      };
-    
-    return { startOfMonth:startOfWeek, lengthOfMonth:lengthOfMonth};
+    return { firstOfMonth:startOfWeek, lengthOfMonth:lengthOfMonth};
 }
-Calendar.prototype.calendarTitle = function (dateStr) {
+// table header
+Calendar.prototype.tableHeader = function (dateStr) {
     let html = "";
     html += '<table class="calendar-table">';
     html += '<tr><th colspan="7">';
@@ -89,43 +88,32 @@ Calendar.prototype.calendarTitle = function (dateStr) {
 
     return html;
 }
-Calendar.prototype.calendarRow = function (today, monthDetails, i) {
-    let html = "";
-    let lengthOfMonth = monthDetails.lengthOfMonth;
-    let startOfMonth = monthDetails.startOfMonth;
-    this.dayCounter= dayCounter + 1;
+// one week
+Calendar.prototype.calendarRow = function (today, monthDetails, week) {
+    
+    let html = "</tr><tr>";
+    
+    if (this.dayCounter > monthDetails.lengthOfMonth) { return html; } // stop if end of month
+    
+    for (let dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) { // loop for each day of the week
 
-    // loop for weekdays (cells)
-    for (let dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
+        html += '<td class="calendar-day';   
+        if (this.dayCounter == today) { html += ' today'; } // add today class
 
-        html += '<td class="calendar-day';
-
-        // Add today class          
-        if (dayCounter == today) { html += ' today'; }
-
-        // start adding calendar days from startingDayOfTheWeek
-        if (i > 0 || dayOfWeek >= startOfMonth) {
-            html += `" id = "day">${dayCounter}`;
-            dayCounter++;
+        if ((week > 0) || (dayOfWeek >= monthDetails.firstOfMonth)) { // start from first day of month
+            html += `" id = "day">${this.dayCounter++}`;
         } else {
             html += `">`;
         }
         html += '</td>';
     }
-    // stop at end of month
-    if (dayCounter > lengthOfMonth) {
-        return html;
-    } else {
-        html += '</tr><tr>';
-    }
-
     return html
 }
+// all days of the mone
 Calendar.prototype.calendarBody = function (monthDetails, todaysDate) {
 
     let html = "";
     let today = todaysDate.today;
-    this.dayCounter = 0
 
     // loop for weeks (rows)
     for (let i = 0; i < 6; i++) {
@@ -144,9 +132,9 @@ Calendar.prototype.calendarHTML = function() {
     let readableDate = this.readableDate(todaysDate);
     let html = '';
     
-    startOfMonth = this.startMonday(monthDetails.startOfMonth);
+    firstOfMonth = this.startMonday(monthDetails.firstOfMonth);
 
-    html += this.calendarTitle(readableDate);
+    html += this.tableHeader(readableDate);
     html += this.calendarBody(monthDetails, todaysDate);
     
     return html;
